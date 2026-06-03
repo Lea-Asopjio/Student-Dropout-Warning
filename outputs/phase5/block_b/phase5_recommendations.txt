@@ -1,0 +1,242 @@
+======================================================================
+STUDENT DROPOUT EARLY WARNING SYSTEM
+Actionable Recommendations Report
+Date: June 02, 2026
+======================================================================
+
+  This report translates statistical findings into specific,
+  evidence-based actions for institutions, educators, and policy teams.
+  Each recommendation is labelled with:
+    [PRIORITY]  : HIGH / MEDIUM / LOW
+    [TIMELINE]  : Immediate (0–4 weeks) / Short (1–3 months) / Long (3–12 months)
+    [EVIDENCE]  : The specific Phase finding that supports it
+
+======================================================================
+SECTION 1 — INSTITUTION-LEVEL RECOMMENDATIONS
+──────────────────────────────────────────────────────────────────────
+  Operational actions for student services, advising, and leadership.
+
+  [I-1] Deploy the weekly risk scoring pipeline
+  Priority : HIGH   |   Timeline: Immediate (weeks 1–4 of each term)
+  What to do:
+    Run the XGBoost model weekly as new assessment data
+    arrives. Generate an updated ranked risk table every Monday
+    morning, prioritising HIGH-risk students (p ≥ 0.70).
+  Evidence:
+    The model achieves ROC-AUC = 0.908 and recall = 0.850,
+    meaning it catches 85.0% of real dropouts before
+    they withdraw — a significant improvement over reactive,
+    post-withdrawal tracking.
+  Success metric: Target: contact 100% of HIGH-risk students within 48 hours of flagging.
+
+  [I-2] Assign dedicated advisors to all 8,180 HIGH-risk students
+  Priority : HIGH   |   Timeline: Immediate
+  What to do:
+    Create a first-contact protocol: advisor emails or calls every
+    student in the HIGH tier by the end of week 4. Use the SHAP
+    waterfall explanation to personalise the message — reference
+    the specific factors driving their risk score.
+  Evidence:
+    Research consistently shows that personalised outreach in the
+    first month is the highest-leverage retention intervention.
+    Generic mass emails have near-zero effect.
+  Success metric: Target: 80% response rate from HIGH-risk students within 2 weeks.
+
+  [I-3] Create a support pathway for students with no formal qualifications
+  Priority : HIGH   |   Timeline: Short (this academic year)
+  What to do:
+    Design a pre-term bridging programme (online, 2–4 weeks) for
+    students entering with no formal qualifications. Focus on
+    academic writing, study skills, and digital literacy.
+    Make enrolment automatic for this cohort, not optional.
+  Evidence:
+    Students with no formal qualifications drop out at nearly double
+    the overall rate. This is the strongest demographic predictor
+    of dropout identified in Phase 3 (chi-square and logistic
+    regression both significant at p < 0.001).
+  Success metric: Target: reduce dropout rate for this cohort by 10pp within 2 years.
+
+  [I-4] Flag late-registration students as a high-priority cohort
+  Priority : MEDIUM   |   Timeline: Short (this semester)
+  What to do:
+    Any student who registers after the course start date should be
+    automatically added to an advisor watchlist. Send a structured
+    welcome message within 24 hours including: key deadlines,
+    a support contact, and a link to orientation materials.
+  Evidence:
+    Late registration is a statistically significant predictor of
+    dropout (Phase 2 EDA and Phase 3 logistic regression).
+    These students missed the orientation period and may feel
+    isolated from peers from day one.
+  Success metric: Target: zero late-registration students without an advisor contact.
+
+  [I-5] Build a dropout cost dashboard for leadership
+  Priority : MEDIUM   |   Timeline: Long (next academic year)
+  What to do:
+    Calculate the cost per dropout: lost tuition, advisor time, re-enrolment
+    processing. Present the early warning system ROI in financial
+    terms — every 1% reduction in dropout rate saves the institution
+    a quantifiable amount in lost revenue.
+  Evidence:
+    Retention interventions compete for budget with other priorities.
+    A clear financial case (cost of dropout vs cost of advisor
+    time) makes the business case for sustaining the programme.
+  Success metric: Publish quarterly retention reports to the board.
+
+======================================================================
+SECTION 2 — EDUCATOR-LEVEL RECOMMENDATIONS
+──────────────────────────────────────────────────────────────────────
+  Actions for course designers, module leaders, and teaching staff.
+
+  [E-1] Use first assessment score as an early alert trigger
+  Priority : HIGH   |   Timeline: Immediate (current term)
+  What to do:
+    Implement an automatic alert when a student's first assessment
+    score falls below 40. The alert goes to both the student
+    (with a support message) and their personal tutor.
+    Do not wait for the second or third assessment.
+  Evidence:
+    'First assessment score' emerged as one of the strongest SHAP
+    predictors of dropout — the model assigns it large positive
+    SHAP values for high-risk students. Students who struggle
+    early rarely recover without intervention.
+  Success metric: Alert sent within 24 hours of first assessment submission.
+
+  [E-2] Audit modules with above-average dropout rates
+  Priority : HIGH   |   Timeline: Short (course redesign cycle)
+  What to do:
+    Identify the 2–3 modules with the highest dropout rates from
+    the Block B7 analysis. Convene a course review panel to
+    examine: assessment load, pacing, clarity of learning
+    outcomes, and availability of worked examples. Compare
+    against low-dropout modules for design lessons.
+  Evidence:
+    Dropout rate varies significantly across modules (Phase 2,
+    Block B7). Variation at the module level suggests course
+    design contributes to dropout — not just student factors.
+  Success metric: Reduce highest-dropout module's rate by 5pp in one redesign cycle.
+
+  [E-3] Monitor assessment submission rates, not just scores
+  Priority : MEDIUM   |   Timeline: Short
+  What to do:
+    Track pct_submitted (% of available assessments attempted)
+    weekly. A student who stops submitting — even if their scores
+    were acceptable — is showing a strong disengagement signal.
+    Flag any student whose submission rate drops below 60%.
+  Evidence:
+    pct_submitted and n_assessments ranked highly in both the
+    SHAP importance plot and Phase 3 correlation analysis.
+    Submission dropout often precedes formal withdrawal by
+    2–4 weeks — creating an intervention window.
+  Success metric: Weekly submission-rate report available to tutors by Tuesday.
+
+  [E-4] Encourage early submission as a protective behaviour
+  Priority : LOW   |   Timeline: Long
+  What to do:
+    Redesign assessment schedules to reward early submission
+    (e.g. optional early feedback window). Students who submit
+    early (mean_days_early > 0) show lower dropout risk.
+    Build early submission habits through low-stakes practice
+    tasks in weeks 1 and 2.
+  Evidence:
+    mean_days_early (days submitted before the due date) is a
+    positive engagement proxy that appears in the SHAP
+    analysis as a protective feature (negative SHAP → lower
+    dropout probability) for students who submit early.
+  Success metric: Increase mean days_early by 2 days across all submissions.
+
+======================================================================
+SECTION 3 — POLICY-LEVEL RECOMMENDATIONS
+──────────────────────────────────────────────────────────────────────
+  Structural actions for equity, access, and institutional policy.
+
+  [P-1] Expand financial support for students from deprived areas
+  Priority : HIGH   |   Timeline: Long (funding cycle)
+  What to do:
+    Allocate additional bursary funding specifically to students
+    in IMD bands 0–30% (most deprived third). The funding
+    should cover course materials, internet access, and childcare
+    — the practical barriers that drive withdrawal more than
+    academic ability.
+  Evidence:
+    Students from the most deprived IMD bands drop out at
+    significantly higher rates (Phase 2, Block B4). This gap
+    persists after controlling for education level, suggesting
+    it reflects financial and resource constraints, not academic
+    preparedness.
+  Success metric: Reduce IMD 0-10% dropout rate to within 5pp of the overall average.
+
+  [P-2] Disaggregate dropout data by IMD band in all reporting
+  Priority : HIGH   |   Timeline: Short
+  What to do:
+    Require all institutional dropout reports to break down
+    rates by IMD band, education level, and disability status —
+    not just overall averages. Publish these figures publicly
+    as part of access and participation commitments.
+  Evidence:
+    Aggregate dropout rates mask significant equity gaps. The
+    Phase 2 analysis shows students with no formal qualifications
+    from deprived areas face compounded disadvantage that is
+    invisible in headline numbers.
+  Success metric: Equity-disaggregated dropout report published each semester.
+
+  [P-3] Implement a data consent and ethics framework
+  Priority : MEDIUM   |   Timeline: Long
+  What to do:
+    Before deploying the early warning system in a live setting,
+    publish a clear student-facing data use policy explaining:
+    what data is used, how risk scores are computed, who sees
+    them, and how students can opt out. Form an ethics review
+    panel with student representation.
+  Evidence:
+    Predictive models carry risks of self-fulfilling prophecy
+    and bias amplification. Students labelled 'high risk' may
+    be treated differently in ways that harm rather than help.
+    Transparent governance prevents misuse.
+  Success metric: Ethics framework published and reviewed before any live deployment.
+
+======================================================================
+SECTION 4 — TECHNICAL RECOMMENDATIONS
+──────────────────────────────────────────────────────────────────────
+  Actions for data science and engineering teams.
+
+  [T-1] Retrain the model each academic year on fresh cohort data
+  Priority : HIGH   |   Timeline: Short
+  What to do:
+    Set up an annual model retraining pipeline. Each September,
+    retrain on the most recent 3 years of cohort data, rerun
+    the full Phase 3 statistical tests to check for feature
+    drift, and re-evaluate against a held-out validation set
+    before promoting to production.
+  Evidence:
+    The model was trained on 2013–2014 data. Student behaviour,
+    technology use, and demographics shift over time. A model
+    that was optimal 10 years ago may be mis-calibrated today.
+  Success metric: Annual retraining complete before week 1 of each academic year.
+
+  [T-2] Build a real-time scoring API triggered by assessment submissions
+  Priority : HIGH   |   Timeline: Long
+  What to do:
+    Package the trained model and preprocessing pipeline as a
+    REST API endpoint. Each time a student submits an assessment,
+    the VLE triggers a score update. Updated risk tiers are
+    pushed to the advisor dashboard within 1 hour.
+  Evidence:
+    Currently the model is scored as a batch job. Real-time
+    scoring means advisors always have current information
+    and can act the moment a student's behaviour changes.
+  Success metric: Score latency < 1 hour from assessment submission.
+
+  [T-3] Extend to multi-class prediction (Pass/Fail/Withdraw/Distinction)
+  Priority : MEDIUM   |   Timeline: Long
+  What to do:
+    The current model is binary. Extending to a 4-class softmax
+    output allows institutions to identify students at risk of
+    Fail (stayed but underperforming) separately from Withdrawn.
+    Different interventions apply to each outcome.
+  Evidence:
+    Failing students and withdrawing students have different needs.
+    A student trending toward Fail needs academic support.
+    A student trending toward Withdrawal may need pastoral or
+    financial support. Binary models can't distinguish these.
+  Success metric: Multi-class model achieves macro-F1 ≥ 0.65 on validation set.

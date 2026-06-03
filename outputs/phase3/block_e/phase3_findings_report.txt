@@ -1,0 +1,153 @@
+=================================================================
+STUDENT PERFORMANCE & DROPOUT EARLY WARNING SYSTEM
+Phase 3: Statistical Analysis — Findings Report
+Dataset : Open University Learning Analytics (OULAD)
+Date    : June 01, 2026
+=================================================================
+
+1. ANALYSIS CONTEXT
+─────────────────────────────────────────────────────────────────
+  Phase 3 formally tests the patterns observed in Phase 2 EDA.
+  Tests performed:
+    Block A — Chi-square tests   : categorical features vs dropout
+    Block B — Welch's t-tests    : numeric features vs dropout
+    Block C — Logistic regression: multivariate dropout model
+    Block D — Odds ratios        : effect size interpretation
+  Significance threshold: p < 0.05 throughout
+  Total student-course rows: 32,593
+  Overall dropout rate     : 31.2%
+
+2. CHI-SQUARE TEST RESULTS (Block A)
+─────────────────────────────────────────────────────────────────
+  H0: Feature is independent of dropout
+
+  Feature                               χ²       p-value        V  Sig
+  ────────────────────────────── ─────────  ────────────  ───────  ───
+  code_module                      1024.43     4.65e-218   0.1773  ✅
+  imd_band                          200.21      2.99e-38   0.0797  ✅
+  highest_education                 202.22      1.25e-42   0.0788  ✅
+  disability                        109.12      1.53e-25   0.0579  ✅
+  num_of_prev_attempts               39.03      7.05e-07   0.0346  ✅
+  age_band                           38.28      4.87e-09   0.0343  ✅
+  gender                              5.73        0.0166   0.0133  ✅
+
+  Significant features  : 7  → ['gender', 'age_band', 'highest_education', 'imd_band', 'disability', 'num_of_prev_attempts', 'code_module']
+  Not significant       : 0  → []
+  Strongest association : code_module  (V = 0.1773)
+
+3. T-TEST RESULTS (Block B — Welch's)
+─────────────────────────────────────────────────────────────────
+  H0: Group means are equal (dropout vs no dropout)
+
+  studied_credits:
+    Mean dropout   : 91.430
+    Mean no-dropout: 74.476
+    t = 32.086,  p = 5.70e-219,  Cohen's d = 0.421 (small)
+    ✅ Significant
+
+  num_of_prev_attempts:
+    Mean dropout   : 0.187
+    Mean no-dropout: 0.153
+    t = 5.715,  p = 1.11e-08,  Cohen's d = 0.071 (negligible)
+    ✅ Significant
+
+  mean_score:
+    Mean dropout   : 66.557
+    Mean no-dropout: 74.450
+    t = -28.869,  p = 1.98e-173,  Cohen's d = -0.518 (medium)
+    ✅ Significant
+
+4. LOGISTIC REGRESSION RESULTS (Block C)
+─────────────────────────────────────────────────────────────────
+  Model: multivariate logistic regression (all features combined)
+  Train/test split: 80/20 with stratification
+  Class weighting: balanced (compensates for 30/70 imbalance)
+
+  Metric                         Value
+  ───────────────────────── ──────────
+  Accuracy                       64.8%
+  ROC-AUC                       0.6723
+  True Positives (TP)              599
+  False Negatives (FN)             468
+  True Negatives (TN)            2,736
+  False Positives (FP)           1,340
+  Precision                      0.309
+  Recall                         0.561
+  F1-score                       0.399
+
+  Coefficient table:
+  Feature                                 β       OR       p-value  Sig
+  ──────────────────────────────── ────────  ───────  ────────────  ───
+  Studied credits                    0.3259    1.385      0.00e+00  ***
+  Disability status                  0.1235    1.131      0.00e+00  ***
+  Gender (M=1)                       0.1216    1.129      0.00e+00  ***
+  Age band                           0.0095    1.010        0.6032  n.s.
+  Prev. attempts                     0.0065    1.007        0.7023  n.s.
+  IMD band (deprivation)            -0.0322    0.968        0.0766  n.s.
+  Prior education                   -0.0817    0.922      0.00e+00  ***
+  Mean assess. score                -0.4275    0.652      0.00e+00  ***
+
+5. ODDS RATIO INTERPRETATION (Block D)
+─────────────────────────────────────────────────────────────────
+  OR > 1 = increases dropout odds
+  OR < 1 = decreases dropout odds
+  (Effects are per 1 standard deviation change in each feature)
+
+  Features INCREASING dropout odds:
+    🔴 Studied credits                OR=1.385  (+38.5%)  ***
+    🔴 Disability status              OR=1.131  (+13.1%)  ***
+    🔴 Gender (M=1)                   OR=1.129  (+12.9%)  ***
+
+  Features DECREASING dropout odds:
+    🟢 Mean assess. score             OR=0.652  (-34.8%)  ***
+    🟢 Prior education                OR=0.922  (-7.8%)  ***
+
+  Features with NO significant effect:
+    ⬜ Age band                       OR=1.010  (p=0.6032)
+    ⬜ IMD band (deprivation)         OR=0.968  (p=0.0766)
+    ⬜ Prev. attempts                 OR=1.007  (p=0.7023)
+
+6. TOP 5 FINDINGS FOR YOUR PORTFOLIO
+─────────────────────────────────────────────────────────────────
+
+  1. ALL CATEGORICAL FEATURES ARE STATISTICALLY SIGNIFICANT
+     Every feature tested (chi-square) showed a significant
+     association with dropout (p < 0.05). The strongest was
+     code_module (Cramér's V = 0.177).
+
+  2. ASSESSMENT SCORE IS THE STRONGEST NUMERIC PREDICTOR
+     Dropout students score 7.9 points lower on average
+     (p = 1.98e-173, Cohen's d = -0.518).
+     This is actionable: score data is available early in the course.
+
+  3. LOGISTIC REGRESSION ACHIEVES MEANINGFUL PREDICTIVE POWER
+     ROC-AUC = 0.672 — well above the 0.50 random baseline.
+     The model correctly identifies 599 of 1,067 at-risk students
+     in the test set (56.1% recall).
+
+  4. STRONGEST INDEPENDENT RISK FACTOR: Studied credits
+     After controlling for all other features, this variable is
+     associated with 38.5% higher dropout odds
+     (OR = 1.385, ***).
+
+  5. STRONGEST PROTECTIVE FACTOR: Mean assess. score
+     Higher values are associated with 34.8% lower dropout odds
+     (OR = 0.652, ***).
+     Institutions can use this to identify resilience factors.
+
+7. NEXT STEPS — PHASE 4: MACHINE LEARNING MODEL
+─────────────────────────────────────────────────────────────────
+  Phase 3 logistic regression is a solid baseline model.
+  Phase 4 will build on this with:
+
+  • Feature engineering  : create interaction terms, time-based
+                           features from assessment timing
+  • Advanced models      : Random Forest, Gradient Boosting (XGBoost)
+  • Class imbalance      : SMOTE oversampling, threshold tuning
+  • Model comparison     : cross-validated AUC for all models
+  • Risk score output    : probability-based dropout risk per student
+  • Feature importance   : SHAP values for model explainability
+
+=================================================================
+END OF PHASE 3 FINDINGS REPORT
+=================================================================

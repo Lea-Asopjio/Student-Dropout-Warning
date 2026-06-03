@@ -1,0 +1,53 @@
+
+SKILLS DEMONSTRATED — Student Dropout Early Warning System
+============================================================
+(Copy-paste into CV, LinkedIn, or cover letter)
+
+PROGRAMMING & TOOLS
+  • Python (pandas, numpy, matplotlib, seaborn, scipy, sklearn,
+    statsmodels, xgboost, shap, imbalanced-learn)
+  • Jupyter Notebooks and modular Python scripts
+  • Git-ready project structure with reproducible pipelines
+
+DATA ENGINEERING
+  • Multi-table relational data merging (5 CSV tables, 32,593 rows)
+  • Feature engineering: encoding, interaction terms, timing features
+  • Missing value imputation and outlier analysis
+  • sklearn Pipeline for leak-free preprocessing
+
+EXPLORATORY DATA ANALYSIS
+  • Distribution plots, correlation heatmaps, group comparison charts
+  • Dropout rate analysis across 7 demographic and academic variables
+  • Timing analysis: cumulative dropout curves and intervention windows
+
+STATISTICAL ANALYSIS
+  • Chi-square tests with Cramér's V effect size
+  • Welch's t-tests and one-way ANOVA with Cohen's d
+  • Multivariate logistic regression (coefficients, p-values, CIs)
+  • Odds ratios and forest plot visualisation
+
+MACHINE LEARNING
+  • Binary classification: Logistic Regression, Decision Tree,
+    Random Forest, XGBoost
+  • Class imbalance: SMOTE oversampling (imbalanced-learn)
+  • Hyperparameter tuning: GridSearchCV with stratified k-fold CV
+  • Threshold optimisation for recall/precision trade-off
+  • Model evaluation: ROC-AUC, PR curve, confusion matrix, F1
+
+EXPLAINABILITY (XAI)
+  • SHAP TreeExplainer and LinearExplainer
+  • Global: beeswarm summary, mean |SHAP| importance, dependence plots
+  • Local: waterfall plots for individual student explanations
+
+COMMUNICATION
+  • Executive summary for non-technical stakeholders
+  • 15 evidence-based recommendations across 4 audience types
+  • Priority action matrix (impact vs effort visualisation)
+  • 9-panel portfolio dashboard (publication-quality)
+  • GitHub README with full methodology and results
+
+PROJECT OUTCOMES
+  • Best model: XGBoost
+  • ROC-AUC: 0.908  |  Recall: 0.850  |  F1: 0.748
+  • 8,180 students flagged as HIGH dropout risk
+  • Full risk score table (32,593 students) ready for deployment

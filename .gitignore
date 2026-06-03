@@ -1,0 +1,24 @@
+# OULAD data files — too large and licensed, don't push
+data/
+
+# Pickle files — large binary model objects
+outputs/**/*.pkl
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+venv/
+env/
+*.egg-info/
