@@ -188,5 +188,5 @@ Prepared: June 02, 2026
 ======================================================================
 END OF EXECUTIVE SUMMARY
 Full technical report: phases 1–4 notebooks and scripts
-Contact: [Your Name]  |  June 02, 2026
+Contact: Sheila Asopjio  |  June 02, 2026
 ======================================================================
