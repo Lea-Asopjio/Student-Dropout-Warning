@@ -1,0 +1,192 @@
+======================================================================
+STUDENT DROPOUT EARLY WARNING SYSTEM
+Executive Summary
+Open University Learning Analytics Dataset (OULAD)
+Prepared: June 02, 2026
+======================================================================
+
+1. PROBLEM STATEMENT
+──────────────────────────────────────────────────────────────────────
+
+  Student dropout is one of the most costly challenges facing higher
+  education institutions. When a student withdraws mid-course, the
+  institution loses tuition revenue, the student loses time and
+  confidence, and society loses a trained graduate.
+
+  Early identification of at-risk students — before they withdraw —
+  creates a window for targeted intervention: advisor outreach,
+  additional support, or adjusted workload. The earlier the
+  identification, the higher the chance of retention.
+
+  This project asks: can we predict which students are most likely
+  to drop out, early enough to intervene, and explain why?
+
+2. DATA AND METHODOLOGY
+──────────────────────────────────────────────────────────────────────
+
+  Dataset:
+    Open University Learning Analytics Dataset (OULAD)
+    32,593 student-course enrolments across 7 course modules
+    Real anonymised data from the UK Open University (2013–2014)
+
+  Methodology — 5-phase end-to-end pipeline:
+    Phase 1 — Data acquisition and quality checks
+    Phase 2 — Exploratory data analysis (EDA)
+    Phase 3 — Statistical analysis (chi-square, t-tests, logistic regression)
+    Phase 4 — Machine learning model (Random Forest, XGBoost, SMOTE, SHAP)
+    Phase 5 — Insights report and recommendations  ← this document
+
+  Features used (19 total):
+    • Demographic    : gender, age band, disability status
+    • Socioeconomic  : IMD deprivation band, prior education level
+    • Academic       : previous attempts, studied credits
+    • Behavioural    : assessment scores, % submissions, submission timing
+    • Interaction    : education × deprivation, attempts × score
+
+  Target variable:
+    Binary dropout flag — 1 if student Withdrew, 0 otherwise
+    Overall dropout rate: 31.2%  (10,156 of 32,593 students)
+
+3. KEY FINDINGS
+──────────────────────────────────────────────────────────────────────
+
+  Finding 1 — Dropout is widespread and unevenly distributed
+    30%+ of enrolled students withdraw before completing their course.
+    Dropout rates vary significantly across course modules, age groups,
+    and education levels — suggesting structural and support-related
+    causes, not just individual student factors.
+
+  Finding 2 — Prior education is the strongest demographic predictor
+    Students with no formal qualifications drop out at nearly twice
+    the rate of postgraduate-educated students. This persists after
+    controlling for all other variables in the logistic regression.
+
+  Finding 3 — Socioeconomic deprivation compounds dropout risk
+    Students from the most deprived areas (IMD 0–10%) show
+    significantly higher dropout rates than those from affluent areas.
+    The education × deprivation interaction reveals that low-educated
+    students from deprived areas face a compounded disadvantage.
+
+  Finding 4 — Assessment behaviour is the most powerful early signal
+    Mean assessment score, % of assessments submitted, and first
+    assessment score are the strongest predictors of dropout —
+    stronger than any demographic variable. Crucially, this
+    information is available within the first 4–6 weeks of term.
+
+  Finding 5 — Most dropouts happen early in the course
+    50% of all dropouts withdraw within the first half of the course.
+    A model that scores students before the midpoint could flag the
+    majority of at-risk students while there is still time to act.
+
+  Finding 6 — Late registration is a dropout signal
+    Students who register after the course start date have higher
+    dropout rates, likely reflecting lower commitment or preparation.
+
+4. MODEL PERFORMANCE
+──────────────────────────────────────────────────────────────────────
+
+  Four models were trained and compared:
+    Logistic Regression  —  interpretable baseline
+    Decision Tree        —  simple, fully explainable
+    Random Forest        —  robust ensemble (tuned)
+    XGBoost              —  gradient boosting (tuned)
+
+  Best model: XGBoost
+
+  Performance on held-out test set:
+    ROC-AUC   : 0.908   (1.0 = perfect, 0.5 = random)
+    Recall    : 0.850   (proportion of actual dropouts caught)
+    Precision : 0.668   (proportion of flagged students who withdrew)
+    F1-score  : 0.748   (harmonic mean of precision and recall)
+
+  Interpretation:
+    The model correctly identifies 85.0% of students who will
+    drop out — meaning it catches 85.0 out of every 100 real
+    dropouts before they withdraw. The 15.0% it misses
+    represents students whose early behaviour appears low-risk.
+
+  Class imbalance handling:
+    SMOTE oversampling was applied to the training set only,
+    generating synthetic minority-class samples to balance the
+    30/70 dropout/non-dropout split. The test set was never
+    modified, ensuring honest evaluation.
+
+  Explainability:
+    SHAP (SHapley Additive exPlanations) values were computed for
+    every student, enabling feature-level explanations for each
+    individual prediction — not just global importance rankings.
+
+5. RISK SCORING OUTPUT
+──────────────────────────────────────────────────────────────────────
+
+  Every student was scored and assigned to a risk tier:
+
+    🔴 HIGH risk   (dropout probability ≥ 0.70):  8,180  students  (25.1%)
+    🟡 MEDIUM risk (probability 0.40 – 0.69):     4,212  students  (12.9%)
+    🟢 LOW risk    (probability < 0.40):           20,201  students  (62.0%)
+
+  The output is a ranked table of all 32,593 students with:
+    • Dropout probability (0–1 score)
+    • Risk tier (HIGH / MEDIUM / LOW)
+    • Key risk factors per student (via SHAP)
+    • Demographic and course context
+
+  Institutions can use this table to:
+    • Prioritise which students advisors contact first
+    • Tailor interventions to each student's specific risk factors
+    • Monitor weekly score changes as new assessment data arrives
+
+6. RECOMMENDATIONS PREVIEW
+──────────────────────────────────────────────────────────────────────
+
+  Full recommendations are detailed in Block B of this report.
+  In summary:
+
+  For institutions:
+    • Implement a weekly risk-scoring run using this model
+    • Assign dedicated advisors to all HIGH-risk students by week 4
+    • Create targeted support pathways for students with no formal
+      qualifications entering credit-heavy modules
+
+  For educators:
+    • Use first-assessment scores as an early alert trigger
+    • Investigate modules with above-average dropout rates for
+      course design issues (pacing, assessment load, clarity)
+
+  For policy:
+    • Address the socioeconomic gap: students from the most deprived
+      areas need additional financial and academic support structures
+    • Track late-registration students as a high-priority cohort
+
+7. LIMITATIONS AND NEXT STEPS
+──────────────────────────────────────────────────────────────────────
+
+  Limitations:
+    • Dataset covers 2013–2014 OU data — student behaviour and
+      technology access may have changed significantly since.
+    • The model predicts withdrawal but cannot distinguish voluntary
+      withdrawal (life circumstances) from academic withdrawal
+      (struggling with content) — interventions differ.
+    • SMOTE-generated synthetic samples may not reflect real
+      student profiles at the extremes of the feature distribution.
+    • Feature availability timing: some features (mean_score) are
+      only available after assessments are submitted. A real-time
+      system must track which features are available at each
+      point in the course calendar.
+
+  Recommended next steps:
+    • Retrain on more recent data (post-2020 remote-learning cohorts)
+    • Build a real-time scoring pipeline triggered by each new
+      assessment submission
+    • A/B test interventions: randomly assign at-risk students to
+      intervention vs control groups to measure causal impact
+    • Extend to multi-class prediction: distinguish Withdrawn /
+      Fail / Pass / Distinction rather than binary dropout
+    • Integrate student consent and data governance framework
+      before deployment in a live institution
+
+======================================================================
+END OF EXECUTIVE SUMMARY
+Full technical report: phases 1–4 notebooks and scripts
+Contact: [Your Name]  |  June 02, 2026
+======================================================================
